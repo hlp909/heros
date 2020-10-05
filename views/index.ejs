@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hero - Admin</title>
+  <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+
+<body>
+  <header>
+    <div class="page-header container">
+      <h1>中国女排 <small>英雄管理器</small></h1>
+    </div>
+  </header>
+  <div class="container hero-list">
+    <a class="btn btn-success pull-right" href="/addHero">添加英雄</a>
+    <table class="table table-hover">
+      <thead>
+        <th>编号</th>
+        <th>名称</th>
+        <th>性别</th>
+        <th>创建时间</th>
+        <th>操作</th>
+      </thead>
+      <tbody>
+
+      </tbody>
+
+    </table>
+  </div>
+  <script src="/node_modules/jquery/dist/jquery.js"></script>
+  <script src="/node_modules/art-template/lib/template-web.js"></script>
+  <script type="text/template" id="herosList">
+    {{each data}}
+     <tr>
+          <td>{{$index+1}}</td>
+          <td>{{$value.name}}</td>
+          <td>{{$value.gender}}</td>
+          <td>{{$value.ctime}}</td>
+          <td>
+            <a href="/info?id={{$value.id}}">查看</a>
+            <a href="/edit?id={{$value.id}}">编辑</a>
+            <a href="javascript:;" data-id="{{$value.id}}">删除</a>
+          </td>
+        </tr>
+        {{/each}}
+  </script>
+
+  <script>
+    render()
+
+    function render() {
+      $.ajax({
+        type: 'get',
+        url: './getAllHerosData',
+        success: function (res) {
+          // console.log(res);
+          // console.log(typeof res);
+          // 2.判断是否真正的获取到了数据
+          if (res.code == 200) {
+            // 3.准备模板字符串
+            var htmlStr = template('herosList', res)
+            // 4.将字符串渲染到页面中
+            $('tbody').html(htmlStr)
+          }
+        }
+      })
+    }
+  </script>
+
+</body>
+
+</html>
